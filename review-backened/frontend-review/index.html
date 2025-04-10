@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Review Form</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h2>Leave a Review</h2>
+  <form id="reviewForm">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="rating">Rating:</label>
+    <select id="rating" name="rating" required>
+      <option value="">--Select--</option>
+      <option value="5">⭐⭐⭐⭐⭐</option>
+      <option value="4">⭐⭐⭐⭐</option>
+      <option value="3">⭐⭐⭐</option>
+      <option value="2">⭐⭐</option>
+      <option value="1">⭐</option>
+    </select>
+
+    <label for="message">Review:</label>
+    <textarea id="message" name="message" rows="4" required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const review = {
+        name: document.getElementById('name').value,
+        rating: document.getElementById('rating').value,
+        message: document.getElementById('message').value,
+      };
+
+      try {
+        const res = await fetch('http://localhost:5000/api/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(review)
+        });
+
+        const data = await res.json();
+        alert(data.message || "Review submitted!");
+        document.getElementById('reviewForm').reset();
+      } catch (err) {
+        alert("Error submitting review.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
